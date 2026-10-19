@@ -1,0 +1,262 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#071326">
+    <title>Emergency Vehicle Finder | Dispatch Center</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-shell">
+
+        <!-- Header -->
+        <header class="topbar">
+            <a href="#" class="brand">
+                <div class="brand-icon">✚</div>
+                <div>
+                    <h1>Emergency <span>Vehicle Finder</span></h1>
+                    <p>FAST RESPONSE. SAFER COMMUNITIES.</p>
+                </div>
+            </a>
+
+            <div class="header-right">
+                <div class="live-indicator">
+                    <span class="live-dot"></span>
+                    <span id="backendStatus">Connecting to Java...</span>
+                </div>
+                <div class="header-tag">DSA PROJECT</div>
+            </div>
+        </header>
+
+        <main>
+            <!-- Welcome -->
+            <section class="welcome-section">
+                <div>
+                    <p class="eyebrow">EMERGENCY DISPATCH SYSTEM</p>
+                    <h2>Every second <span>matters.</span></h2>
+                    <p class="welcome-text">
+                        Find, search and sort emergency vehicles efficiently.
+                    </p>
+                </div>
+                <div class="hero-icon" aria-hidden="true">🚨</div>
+            </section>
+
+            <!-- Summary cards -->
+            <section class="stats-grid" aria-label="Vehicle summary">
+                <article class="stat-card blue">
+                    <div class="stat-icon">🚑</div>
+                    <div>
+                        <p>Ambulances</p>
+                        <h3 id="ambulanceCount">—</h3>
+                        <span id="ambulanceAvailable">Loading vehicles...</span>
+                    </div>
+                </article>
+
+                <article class="stat-card red">
+                    <div class="stat-icon">🚒</div>
+                    <div>
+                        <p>Fire Trucks</p>
+                        <h3 id="fireCount">—</h3>
+                        <span id="fireAvailable">Loading vehicles...</span>
+                    </div>
+                </article>
+
+                <article class="stat-card green">
+                    <div class="stat-icon">🚓</div>
+                    <div>
+                        <p>Police Vehicles</p>
+                        <h3 id="policeCount">—</h3>
+                        <span id="policeAvailable">Loading vehicles...</span>
+                    </div>
+                </article>
+
+                <article class="stat-card purple">
+                    <div class="stat-icon">📍</div>
+                    <div>
+                        <p>Total Vehicles</p>
+                        <h3 id="totalCount">—</h3>
+                        <span>Registered in the system</span>
+                    </div>
+                </article>
+            </section>
+
+            <!-- Main layout -->
+            <section class="dashboard-grid">
+
+                <!-- Vehicle table -->
+                <section class="panel vehicle-panel">
+                    <div class="panel-heading">
+                        <div>
+                            <p class="eyebrow">VEHICLE DIRECTORY</p>
+                            <h2>All Vehicles</h2>
+                            <p class="muted">Manage and inspect registered vehicles.</p>
+                        </div>
+                        <span class="record-count" id="recordCount">0 vehicles</span>
+                    </div>
+
+                    <div class="toolbar">
+                        <label class="search-input-wrap" for="searchInput">
+                            <span aria-hidden="true">⌕</span>
+                            <input
+                                type="text"
+                                id="searchInput"
+                                placeholder="Enter vehicle ID, e.g. A102"
+                                autocomplete="off"
+                            >
+                        </label>
+
+                        <button class="btn btn-primary" id="searchButton">
+                            Search
+                        </button>
+                        <button class="btn btn-secondary" id="binarySearchButton">
+                            Binary Search
+                        </button>
+                        <button class="btn btn-ghost" id="resetButton">
+                            ↻ Reset
+                        </button>
+                    </div>
+
+                    <p class="message" id="searchMessage" role="status" aria-live="polite"></p>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Vehicle ID</th>
+                                    <th>Type</th>
+                                    <th>Location</th>
+                                    <th>Distance</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="vehicleTableBody">
+                                <tr>
+                                    <td colspan="6" class="empty-state">
+                                        Connecting to Java backend...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="table-footer">
+                        <span>Data source: Java in-memory repository</span>
+                        <span id="tableFooterCount">Waiting for data</span>
+                    </div>
+                </section>
+
+                <!-- Action panels -->
+                <aside class="actions-column">
+
+                    <section class="panel action-panel">
+                        <div class="action-heading">
+                            <div class="action-icon search-icon">⌕</div>
+                            <div>
+                                <h3>Search Vehicles</h3>
+                                <p class="muted">Find a vehicle by its ID.</p>
+                            </div>
+                        </div>
+
+                        <div class="algorithm-label">LINEAR SEARCH</div>
+                        <p class="small-description">
+                            Checks vehicle IDs one by one.
+                        </p>
+                        <button class="btn btn-primary btn-full" id="linearActionButton">
+                            Run Linear Search
+                        </button>
+
+                        <div class="algorithm-label second-label">BINARY SEARCH</div>
+                        <p class="small-description">
+                            Searches a sorted copy of the IDs.
+                        </p>
+                        <button class="btn btn-secondary btn-full" id="binaryActionButton">
+                            Run Binary Search
+                        </button>
+                    </section>
+
+                    <section class="panel action-panel">
+                        <div class="action-heading">
+                            <div class="action-icon sort-icon">↕</div>
+                            <div>
+                                <h3>Sort Vehicles</h3>
+                                <p class="muted">Arrange by nearest distance.</p>
+                            </div>
+                        </div>
+
+                        <div class="algorithm-chip">MERGE SORT · O(n log n)</div>
+                        <button class="btn btn-purple btn-full" id="sortButton">
+                            ⇅ Sort by Distance
+                        </button>
+                    </section>
+
+                    <section class="panel action-panel nearest-panel">
+                        <div class="action-heading">
+                            <div class="action-icon nearest-icon">⌖</div>
+                            <div>
+                                <h3>Find Nearest Vehicle</h3>
+                                <p class="muted">Find the nearest available match.</p>
+                            </div>
+                        </div>
+
+                        <label class="field-label" for="emergencyType">
+                            Emergency type
+                        </label>
+                        <select id="emergencyType">
+                            <option value="Ambulance">Ambulance</option>
+                            <option value="Fire Truck">Fire Truck</option>
+                            <option value="Police">Police</option>
+                        </select>
+
+                        <button class="btn btn-success btn-full" id="findNearestButton">
+                            ⌖ Find Nearest Vehicle
+                        </button>
+
+                        <div id="recommendationResult" class="recommendation-result"
+                             role="status" aria-live="polite">
+                            Select a type to find the nearest available vehicle.
+                        </div>
+                    </section>
+
+                    <section class="info-card">
+                        <div class="info-title">💡 DSA Concepts Used</div>
+                        <div class="concept-row">
+                            <span>Linear Search</span>
+                            <span class="complexity">O(n)</span>
+                        </div>
+                        <div class="concept-row">
+                            <span>Binary Search</span>
+                            <span class="complexity">O(log n)*</span>
+                        </div>
+                        <div class="concept-row">
+                            <span>Merge Sort</span>
+                            <span class="complexity">O(n log n)</span>
+                        </div>
+                        <p class="info-footnote">
+                            *Search time after sorting; this implementation also sorts the ID copy.
+                        </p>
+                    </section>
+
+                </aside>
+            </section>
+
+            <section class="disclaimer">
+                <span>ⓘ</span>
+                <p>
+                    Academic simulation only. Distances are sample data, not live GPS
+                    measurements. Always contact the relevant emergency service in a real emergency.
+                </p>
+            </section>
+        </main>
+
+        <footer>
+            <span>Emergency Vehicle Finder</span>
+            <span>Built with HTML, CSS, Java and DSA</span>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
